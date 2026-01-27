@@ -20,11 +20,12 @@ Run docker with the `python:3.13` image. Use an entrypoint `bash` to interact wi
 
 What's the version of `pip` in the image?
 
-- 25.3
+- 25.3 [x]
 - 24.3.1
 - 24.2.1
 - 23.3.1
 
+The `pip` version inside the container is the `25.3`, located on `/usr/local/lib/python3.13/site-packages/pip (python 3.13)`.
 
 ## Question 2. Understanding Docker networking and docker-compose
 
@@ -64,12 +65,13 @@ volumes:
 
 - postgres:5433
 - localhost:5432
-- db:5433
+- db:5433 
 - postgres:5432
-- db:5432
+- db:5432 [x]
 
 If multiple answers are correct, select any 
 
+The correct answer is `db:5432` because pgadmin and the postgres database are in different containers inside the same network. So, the hostname will be the container's name (db) and the port will be the port made available inside the container's network (5432 in this case.)
 
 ## Prepare the Data
 
