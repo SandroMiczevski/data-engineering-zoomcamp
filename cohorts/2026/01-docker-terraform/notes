@@ -1,0 +1,13 @@
+# Relevant commands to run
+pgcli 'postgresql://admin:password@localhost:5432/taxi' 
+# If running locally, update host it inside docker to 'pg'.
+
+# To build the docker container for ingestion script
+docker build -t green_taxi .
+
+# To check what's the correct network name
+docker network ls   # find the right network name
+
+# To run the ingestion script inside the docker container
+docker run --rm -it --network ingestion_default green_taxi
+

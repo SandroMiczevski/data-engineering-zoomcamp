@@ -13,6 +13,26 @@ When your solution has SQL or shell commands and not code
 (e.g. python files) file format, include them directly in
 the README file of your repository.
 
+## Relevant commands to execute this ingestion
+
+File structure:
+- Inside the folder ingestion you will find the scripts used to ingest both tables and the bash script used to execute both python scripts.
+- Inside the folder Ingestion you will also find the docker-composer file.
+
+
+`pgcli 'postgresql://admin:password@localhost:5432/taxi'` 
+> If running locally, update host it inside docker to 'pg'.
+
+To build the docker container for ingestion script
+`docker build -t green_taxi .`
+
+To check what's the correct network name
+`docker network ls   # find the right network name`
+
+To run the ingestion script inside the docker container
+`docker run --rm -it --network ingestion_default green_taxi`
+
+
 
 ## Question 1. Understanding Docker images
 
