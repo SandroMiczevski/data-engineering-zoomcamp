@@ -19,3 +19,4 @@ serving_dir
 _follow_along
 .venv/
 .secrets/
+postgres_data/
