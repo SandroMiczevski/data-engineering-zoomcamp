@@ -1,0 +1,31 @@
+services:
+  postgres:
+    image: postgres:18
+    container_name: pg_database
+    environment:
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: taxy_db
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    restart: always
+
+  pgadmin:
+    image: dpage/pgadmin4:latest
+    container_name: pgadmin_container
+    environment:
+      PGADMIN_DEFAULT_EMAIL: admin@example.com
+      PGADMIN_DEFAULT_PASSWORD: mypassword
+    ports:
+      - "8080:80" # Map host port 8080 to container port 80
+    volumes:
+      - pgadmin_data:/var/lib/pgadmin
+    restart: always
+    depends_on:
+      - postgres
+
+volumes:
+  postgres_data:
+  pgadmin_data:
