@@ -36,6 +36,10 @@ def download_file(month):
     url = f"{BASE_URL}{month}.parquet"
     file_path = os.path.join(DOWNLOAD_DIR, f"yellow_tripdata_2024-{month}.parquet")
 
+    if os.path.exists(file_path):
+        print(f"File already exists: {file_path}. Skipping download.")
+        return file_path
+        
     try:
         print(f"Downloading {url}...")
         urllib.request.urlretrieve(url, file_path)
@@ -81,10 +85,16 @@ def verify_gcs_upload(blob_name):
 
 def upload_to_gcs(file_path, max_retries=3):
     blob_name = os.path.basename(file_path)
+    # Ensure bucket exists before attempting upload/verification
+    create_bucket(BUCKET_NAME)
+
+    # If the blob already exists in the bucket, skip uploading
+    if verify_gcs_upload(blob_name):
+        print(f"gs://{BUCKET_NAME}/{blob_name} already exists. Skipping upload.")
+        return
+
     blob = bucket.blob(blob_name)
     blob.chunk_size = CHUNK_SIZE
-
-    create_bucket(BUCKET_NAME)
 
     for attempt in range(max_retries):
         try:
@@ -114,7 +124,7 @@ if __name__ == "__main__":
     print("Download process completed.")
 
     print("Starting the upload process...")
-    with ThreadPoolExecutor(max_workers=4) as executor:
+    with ThreadPoolExecutor(max_workers=1) as executor:
         executor.map(upload_to_gcs, filter(None, file_paths))  # Remove None values
 
     print("All files processed and verified.")
